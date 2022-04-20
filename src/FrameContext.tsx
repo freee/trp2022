@@ -17,6 +17,11 @@ export const Frames: Frame[] = [
     path: "frames/frame2.png",
     thumbnail: "frames/thumb_frame2.png",
   },
+  {
+    name: "frame2",
+    path: "frames/frame3.png",
+    thumbnail: "frames/thumb_frame3.png",
+  },
 ];
 
 type Dispatcher = { type: "set"; frame: Frame };
