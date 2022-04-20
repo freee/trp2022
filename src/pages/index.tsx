@@ -59,6 +59,7 @@ const Home: NextPage = () => {
               <Text align="center" mt="8" fontWeight="bold">
                 <NoWrap>自然体でTRP2022を</NoWrap>
                 <NoWrap>楽しんでいる</NoWrap>
+                <br />
                 <NoWrap>あなたのいまの姿を</NoWrap>
                 <NoWrap>SNSに投稿しましょう。</NoWrap>
               </Text>
@@ -71,9 +72,8 @@ const Home: NextPage = () => {
                 </Link>
               </Center>
               <Text fontSize="sm" align="center" mt="4">
-                次の画面に移動したら、
-                <wbr />
-                カメラの使用を「許可」してください。
+                <NoWrap>次の画面に移動したら、</NoWrap>
+                <NoWrap>カメラの使用を「許可」してください。</NoWrap>
               </Text>
             </Box>
           </Stack>
