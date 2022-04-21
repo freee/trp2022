@@ -70,6 +70,7 @@ export const Camera = ({
     }
   };
 
+  const retryRef = useRef<boolean>(false);
   const updateDevices = async () => {
     if (navigator.mediaDevices?.enumerateDevices) {
       const videoDevices = (
@@ -98,8 +99,18 @@ export const Camera = ({
         (d) => d.deviceId === deviceIdRef.current
       );
       const idx = currentIdx >= 0 ? currentIdx : 0;
+      const device = devices[idx];
       setDeviceIndex(idx);
-      setCameraByDeviceId(devices[idx].deviceId);
+      (async () => {
+        await setCameraByDeviceId(device.deviceId);
+        // retry getting devices if device id is empty
+        if (!device.deviceId && !retryRef.current) {
+          retryRef.current = true;
+          updateDevices();
+        } else {
+          retryRef.current = false;
+        }
+      })();
     } else {
       setVideoProhibited(true);
     }
@@ -122,6 +133,9 @@ export const Camera = ({
               playsInline
               autoPlay
               ref={videoRef}
+              onPlay={() => {
+                setVideoAvailable(true);
+              }}
               onSuspend={() => {
                 setVideoAvailable(false);
                 setVideoProhibited(true);
@@ -158,6 +172,13 @@ export const Camera = ({
                     <Text>カメラを起動中です</Text>
                   )}
                   <SelectPhoto onPhotoSelected={onPhotoTaken} />
+                  <Button
+                    variant="ghost"
+                    colorScheme="brand"
+                    onClick={updateDevices}
+                  >
+                    再度試す
+                  </Button>
                 </VStack>
               </Center>
             </AspectRatio>
