@@ -108,29 +108,25 @@ export const Camera = ({
   return (
     <>
       <Stack>
-        <Box
-          w="100%"
-          position="relative"
-          overflow="hidden"
-          background="whiteAlpha.800"
-          borderRadius="lg"
-        >
-          <AspectRatio width="100%" ratio={1} opacity={videoAvailable ? 1 : 0}>
+        <Box w="100%" position="relative">
+          <AspectRatio
+            width="100%"
+            ratio={1}
+            borderRadius="lg"
+            overflow="hidden"
+            background="whiteAlpha.800"
+          >
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-            <video
-              style={{}}
-              playsInline
-              autoPlay
-              ref={videoRef}
-              onSuspend={() => {
-                setVideoAvailable(false);
-                setVideoProhibited(true);
-              }}
-            />
+            <video style={{}} playsInline autoPlay ref={videoRef} />
           </AspectRatio>
           {videoAvailable ? (
             <>
-              <Box inset={0} position="absolute">
+              <Box
+                inset={0}
+                position="absolute"
+                borderRadius="lg"
+                overflow="hidden"
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={publicPath(currentFrame.path)} alt="" />
               </Box>
