@@ -23,7 +23,8 @@ export const Camera = ({
 }): JSX.Element => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [devices, setDevices] = useState<Array<MediaDeviceInfo>>([]);
-  const [deviceIndex, setDeviceIndex] = useState<number>(-1);
+  const [deviceIndex, setDeviceIndex] = useState<number>(0);
+  const deviceIdRef = useRef<string>("");
   const { isIOS } = useBrowser();
   const [facingMode, setFacingMode] = useState<FacingModeValue>("user");
   const { currentFrame } = useContext(FrameContext);
@@ -44,6 +45,7 @@ export const Camera = ({
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
+      deviceIdRef.current = deviceId;
       setVideoAvailable(true);
     } catch {
       setVideoProhibited(true);
@@ -68,20 +70,40 @@ export const Camera = ({
     }
   };
 
+  const updateDevices = async () => {
+    if (navigator.mediaDevices?.enumerateDevices) {
+      const videoDevices = (
+        await navigator.mediaDevices.enumerateDevices()
+      ).filter((device) => device.kind === "videoinput");
+      setDevices(videoDevices);
+    } else {
+      setDevices([]);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      if (navigator.mediaDevices?.enumerateDevices) {
-        const videoDevices = (
-          await navigator.mediaDevices.enumerateDevices()
-        ).filter((device) => device.kind === "videoinput");
-        setDeviceIndex(0);
-        setDevices(videoDevices);
-        if (videoDevices.length > 0) {
-          setCameraByDeviceId(videoDevices[0].deviceId);
-        }
-      }
-    })();
+    updateDevices();
+    navigator.mediaDevices?.addEventListener("devicechange", updateDevices);
+    return () => {
+      navigator.mediaDevices?.removeEventListener(
+        "devicechange",
+        updateDevices
+      );
+    };
   }, []);
+
+  useEffect(() => {
+    if (devices.length > 0) {
+      const currentIdx = devices.findIndex(
+        (d) => d.deviceId === deviceIdRef.current
+      );
+      const idx = currentIdx >= 0 ? currentIdx : 0;
+      setDeviceIndex(idx);
+      setCameraByDeviceId(devices[idx].deviceId);
+    } else {
+      setVideoProhibited(true);
+    }
+  }, [devices]);
 
   return (
     <>
@@ -92,6 +114,7 @@ export const Camera = ({
             ratio={1}
             borderRadius="lg"
             overflow="hidden"
+            background="whiteAlpha.800"
           >
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
             <video style={{}} playsInline autoPlay ref={videoRef} />
@@ -121,13 +144,7 @@ export const Camera = ({
               ></Box>
             </>
           ) : (
-            <AspectRatio
-              ratio={1}
-              inset={0}
-              position="absolute"
-              borderRadius="lg"
-              background="whiteAlpha.800"
-            >
+            <AspectRatio ratio={1} inset={0} position="absolute">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <Center>
                 <VStack>
