@@ -31,9 +31,6 @@ export const Preview = ({
   const path = currentFrame.path;
   const { isIOS, shareAvailable, clipboardWriteTextAvailable } = useBrowser();
   const toast = useToast();
-  const [rendered, setRendered] = useState(false);
-
-  useEffect(() => setRendered(true), []);
 
   useEffect(() => {
     (async () => {
@@ -51,6 +48,21 @@ export const Preview = ({
     <>
       <Stack>
         <Box position="relative">
+          <AspectRatio
+            maxW="100%"
+            ratio={1}
+            borderRadius="lg"
+            overflow="hidden"
+            aria-hidden="true"
+          >
+            <Box
+              position="relative"
+              background="#fff"
+              pointerEvents="none"
+              transitionProperty="opacity"
+              transitionDuration="0.2s"
+            ></Box>
+          </AspectRatio>
           {editedURL && (
             <AspectRatio
               maxW="100%"
@@ -64,23 +76,6 @@ export const Preview = ({
               <img src={editedURL} alt="撮影した写真" />
             </AspectRatio>
           )}
-          <AspectRatio
-            maxW="100%"
-            ratio={1}
-            borderRadius="lg"
-            overflow="hidden"
-            aria-hidden="true"
-          >
-            <Box
-              position="relative"
-              zIndex="1"
-              background="#fff"
-              opacity={rendered ? 0 : 1}
-              pointerEvents="none"
-              transitionProperty="opacity"
-              transitionDuration="0.2s"
-            ></Box>
-          </AspectRatio>
           <Box position="absolute" top={2} left={2} borderRadius="lg">
             <Button
               m={1}
