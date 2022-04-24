@@ -139,7 +139,7 @@ export const Preview = ({
                             type: "image/jpeg",
                           });
                           navigator.share({
-                            text: "自然体でじぶんらしく、東京レインボープライド2022を楽しんでいます！ #TRP2022 #TRP2022_freee ",
+                            text: " #TRP2022 #TRP2022_freee ",
                             files: [file],
                           });
                         },
@@ -154,7 +154,7 @@ export const Preview = ({
               ) : (
                 <Button
                   as="a"
-                  href="https://twitter.com/intent/tweet?text=%E8%87%AA%E7%84%B6%E4%BD%93%E3%81%A7%E3%81%98%E3%81%B6%E3%82%93%E3%82%89%E3%81%97%E3%81%8F%E3%80%81%E6%9D%B1%E4%BA%AC%E3%83%AC%E3%82%A4%E3%83%B3%E3%83%9C%E3%83%BC%E3%83%97%E3%83%A9%E3%82%A4%E3%83%892022%E3%82%92%E6%A5%BD%E3%81%97%E3%82%93%E3%81%A7%E3%81%84%E3%81%BE%E3%81%99%EF%BC%81%20%23TRP2022%20%23TRP2022_freee"
+                  href="https://twitter.com/intent/tweet?text=%20%23TRP2022%20%23TRP2022_freee%20"
                   colorScheme="twitter"
                   target="_blank"
                   rel="noopener noreferer"
